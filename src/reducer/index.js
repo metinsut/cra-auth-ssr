@@ -1,6 +1,4 @@
-import thunk from 'redux-thunk';
-import { applyMiddleware, createStore, combineReducers } from 'redux';
-import logger from 'redux-logger';
+import { combineReducers } from 'redux';
 import usersReducer from './userReducer';
 import postReducer from './postReducer';
 import authReducer from './authReducer';
@@ -13,8 +11,4 @@ const reducers = combineReducers({
 	protected: protectedReducer
 });
 
-const config = applyMiddleware(thunk, logger);
-
-const store = createStore(reducers, typeof window !== 'undefined' && window ? window.INITIAL_STATE : {}, config);
-
-export default store;
+export default reducers;

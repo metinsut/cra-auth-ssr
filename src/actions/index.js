@@ -1,8 +1,8 @@
 import axios from "axios";
 import { FETCH_POSTS, FETCH_USER, FETCH_DATA } from '../actions/actionTypes';
 
-export const fetchUsers = () => async dispatch => {
-   const res = await axios.get('https://jsonplaceholder.typicode.com/users');
+export const fetchUsers = () => async (dispatch, getState, api) => {
+	const res = await api.get('/users');
 	dispatch({
 		type: FETCH_USER,
 		payload: res

@@ -1,6 +1,7 @@
 import '@babel/polyfill';
 import express from 'express';
 import { matchRoutes } from 'react-router-config';
+import proxy from "express-http-proxy";
 import renderer from './helpers/renderer';
 import createStore from './helpers/createStore';
 import Routes from '../src/routes';
@@ -9,8 +10,15 @@ const app = express();
 
 app.use(express.static('live'));
 
+app.use("/api", proxy("http://react-ssr-api.herokuapp.com"), {
+	proxyReqOptDecarator(opts) {
+		opts.header["x-forwareded-host"] = "localhost:3005";
+		return opts;
+	}
+})
+
 app.get('*', (req, res) => {
-	const store = createStore();
+	const store = createStore(req);
 
 	const promises = matchRoutes(Routes, req.path).map(({ route }) => {
 		return route.loadData ? route.loadData(store) : null;
